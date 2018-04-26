@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+{include file="./layout/head" /}
+
+<body class="kit-theme">
+<form class="layui-form" action="{:url('admin/questions/create')}" method="post">
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">Questions:</label>
+		<div class="layui-input-block">
+			<input type="text" name="question" lay-verify="required"   class="layui-input">
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label">答案A:</label>
+		<div class="layui-input-block">
+			<input type="text"   name="answer_a" lay-skin="switch"   class="layui-input" />
+		</div>
+	</div>
+
+ 	<div class="layui-form-item">
+		<label class="layui-form-label">答案B:</label>
+		<div class="layui-input-block">
+			<input type="text"   name="answer_b" lay-skin="switch"  class="layui-input" />
+		</div>
+	</div>
+
+	 <div class="layui-form-item">
+		<label class="layui-form-label">答案C:</label>
+		<div class="layui-input-block">
+			<input type="text"   name="answer_c" lay-skin="switch"  class="layui-input" />
+		</div>
+	</div>
+
+	 <div class="layui-form-item">
+		<label class="layui-form-label">答案D:</label>
+		<div class="layui-input-block">
+			<input type="text"   name="answer_d" lay-skin="switch"  class="layui-input" />
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">正确答案:</label>
+		<div class="layui-input-block">
+			<input type="text"   name="right_answer" lay-skin="switch"   class="layui-input"/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<button class="layui-btn" lay-submit=""  lay-filter="*">立即提交</button>
+			<a href="{:url('admin/questions/showlist')}" class="layui-btn" >返回</a>
+		</div>
+	</div>
+</form>
+</body>
+</html>

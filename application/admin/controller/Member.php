@@ -1,0 +1,49 @@
+<?php
+
+namespace app\admin\controller;
+
+use app\model\member\MemberModel;
+
+class Member extends \app\admin\Auth
+{
+
+    public function showList(){
+
+        if ($this->request->isAjax()) {
+
+            $page = $this->request->get('page/d', 1);
+            $page = max(0, $page - 1);
+            $limit = $this->request->get('limit/d');
+            $search = $this->request->get('search');
+
+            $memberModel = new MemberModel();
+            $data = $memberModel->getList($page,$limit,$search);
+
+            return json(['code' => 0, 'count' => $data['count'], 'data' => $data['list']]);
+        }
+
+        return $this->fetch('showList');
+    }
+
+    public function showFriends(){
+
+        $id = $this->request->get('id');
+
+        if ($this->request->isAjax()) {
+
+            $page = $this->request->get('page/d', 1);
+            $page = max(0, $page - 1);
+            $limit = $this->request->get('limit/d');
+            $id = $this->request->param('id');
+
+            $memberModel = new MemberModel();
+            $data = $memberModel->getFriendsList($id,$page,$limit);
+
+            return json(['code' => 0, 'count' => $data['count'], 'data' => $data['list']]);
+        }
+
+        return $this->fetch('showFriends',['id'=>$id]);
+    }
+
+
+}

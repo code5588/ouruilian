@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+{include file="./layout/head" /}
+  
+<body class="kit-theme">
+
+<div class="demoTable">
+	<div class="layui-inline">
+		<input class="layui-input" name="question" id="demoReload" placeholder="搜索题目" autocomplete="off">
+	</div>
+	<button class="layui-btn" data-type="reload">搜索</button>
+</div>
+
+<table class="layui-table" lay-data="{id:'idTest',height:'full', url:'{:url('admin/member/showList')}', page:true}" lay-filter="demo">
+	<thead>
+	<tr>
+		<th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+		<th lay-data="{field:'user_name', width:300}">会员名称</th>
+		<th lay-data="{field:'point', width:200}">果冻指数</th>
+		<th lay-data="{field:'face_q', width:150}">Q弹</th>
+		<th lay-data="{field:'face_gloss', width:150}">光彩</th>
+		<th lay-data="{field:'face_water', width:150}">水润</th>
+		<th lay-data="{fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}">操作</th>
+	</tr>
+	</thead>
+</table>
+
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-mini" lay-event="showFriends">查看好友</a>
+	<a class="layui-btn layui-btn-mini layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script>
+	layui.use('table', function() {
+		var table = layui.table;
+
+		//监听工具条
+		table.on('tool(demo)', function(obj){
+			var data = obj.data;
+			if(obj.event === 'showFriends'){
+				location.href = '{:url("admin/member/showFriends")}'+'?id='+data.id;
+			}else if(obj.event === 'del'){
+				layer.confirm('真的删除吗？', function(index){
+
+					layui.$.post('{:url("admin/member/delete")}',{id:data.id},function (data) {
+						if(data.code == '0'){
+							obj.del();
+						}else{
+							layer.msg("删除失败")
+						}
+						layer.close(index);
+					},'json')
+
+
+				});
+			}
+		});
+	var $ = layui.$, active = {
+			reload: function(){
+				var demoReload = $('#demoReload');
+				table.reload('idTest', {
+					where: {
+						search: demoReload.val(),
+						id: demoReload.val()
+					}
+				});
+			}
+		};
+	$('.demoTable .layui-btn').on('click', function(){
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+	});
+});
+
+</script>
+
+</body>
+</html>

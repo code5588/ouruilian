@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+{include file="./layout/head" /}
+
+<body class="kit-theme">
+
+<div class="demoTable">
+
+	<div class="layui-layout-right">
+		<a href="{:url('admin/questions/create')}"  class="layui-btn">添加题目</a>
+	</div>
+	<div class="layui-inline">
+		<input class="layui-input" name="question" id="demoReload" placeholder="搜索题目" autocomplete="off">
+	</div>
+	<button class="layui-btn" data-type="reload">搜索</button>
+</div>
+
+<table class="layui-table" lay-data="{id:'idTest',height:'full', url:'{:url('admin/questions/showList')}', page:true}" lay-filter="demo">
+	<thead>
+	<tr>
+		<th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+		<th lay-data="{field:'question', width:800}">题目</th>
+		<th lay-data="{field:'right_answer', width:200}">正确答案</th>
+		<th lay-data="{fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}"></th>
+	</tr>
+	</thead>
+</table>
+
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-mini layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script>
+	layui.use('table', function() {
+		var table = layui.table;
+
+		//监听工具条
+		table.on('tool(demo)', function(obj){
+			var data = obj.data;
+
+			if(obj.event === 'edit'){
+				location.href = '{:url("admin/questions/edit")}'+'?id='+data.id;
+			}else if(obj.event === 'del'){
+				layer.confirm('真的删除吗？', function(index){
+
+					layui.$.post('{:url("admin/questions/delete")}',{id:data.id},function (data) {
+						if(data.code == '0'){
+							obj.del();
+						}else{
+							layer.msg("删除失败")
+						}
+						layer.close(index);
+					},'json')
+
+
+				});
+			}
+		});
+	var $ = layui.$, active = {
+			reload: function(){
+				var demoReload = $('#demoReload');
+				table.reload('idTest', {
+					where: {
+						search: demoReload.val(),
+						id: demoReload.val()
+					}
+				});
+			}
+		};
+	$('.demoTable .layui-btn').on('click', function(){
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+	});
+});
+
+	
+
+</script>
+
+</body>
+</html>

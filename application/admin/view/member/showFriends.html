@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+{include file="./layout/head" /}
+
+<body class="kit-theme">
+
+<div class="demoTable">
+	<div class="layui-inline">
+		<a href="{:url('admin/member/showList')}"  class="layui-btn">返回会员列表</a>
+	</div>
+</div>
+<table class="layui-table" lay-data="{id:'idTest',height:'full', url:'{:url('admin/member/showFriends',['id'=>$id])}', page:true}" lay-filter="demo">
+	<thead>
+		<tr>
+			<th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+			<th lay-data="{field:'user_name', width:300}">会员名称</th>
+			<th lay-data="{field:'point', width:200}">果冻指数</th>
+			<th lay-data="{field:'face_q', width:200}">Q弹</th>
+			<th lay-data="{field:'face_gloss', width:200}">光彩</th>
+			<th lay-data="{field:'face_water', width:200}">水润</th>
+		</tr>
+	</thead>
+</table>
+</body>
+</html>
