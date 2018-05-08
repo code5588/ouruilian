@@ -20,15 +20,11 @@ class Login extends \think\Controller
 
     public function isFirstLogin(){
         $code = input('code');
-//      $openid = input('openid');
-        $user_name = input('user_name');
+        $user_name = addslashes(input('user_name',''));
         $head_url = input('head_url');
         $share_member_id  =input('share_member_id');
 
-        /*if(empty($user_name) || empty($head_url) || empty($openid)){
-            return json(['code'=>-1,'data'=>'缺少参数']);
-        }*/
-        if(empty($code) || empty($user_name) || empty($head_url)){
+        if(empty($code) || empty($head_url)){
             return json(['code'=>-1,'data'=>'缺少参数']);
         }
 

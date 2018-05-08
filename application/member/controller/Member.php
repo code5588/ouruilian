@@ -25,8 +25,15 @@ class Member extends \app\member\Base{
             return json(['code' => -3,'data'=>'用户不存在!']);
         }
 
+        $rank = $memberModel -> getRank($user_id);
+        $count = $memberModel -> getMemberCount();
 
-        $data['rank'] = $memberModel -> getRank($user_id);
+        $userRankBehind = $count - $rank['allRank'];
+        $memberCount = $count - 1;
+        $proportion = round(($userRankBehind/$memberCount)*100,2);
+
+        $data['rank'] = $rank;
+        $data['rank']['proportion'] = $proportion;
         $data['user_info'] = $memberModel -> userInfo($user_id);
         if($data['user_info'][0]['face_mark'] == 0){
             return json(['code' => -4,'data'=>'未使用过面部评分']);

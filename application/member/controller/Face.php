@@ -17,7 +17,6 @@ class Face extends \app\member\Base
         include_once EXTEND_PATH . 'Face/AipFace.php';
         $file = $_FILES['image'];
         $user_id = input('user_id');
-
         if(empty($user_id)){
             return json(['code' => -2,'data'=>'缺少参数']);
         }
@@ -65,11 +64,14 @@ class Face extends \app\member\Base
                               round($readFace['result'][0]['qualities']['blur']*10) + round($readFace['result'][0]['qualities']['illumination']/10) + round($readFace['result'][0]['qualities']['completeness']*10) +
                               round($readFace['result'][0]['qualities']['type']['human']*10);
 
-//        $data['beauty'] = round($readFace['result'][0]['beauty']);
-//        $data['face_q'] = rand(30,60);
-//        $data['face_gloss'] = rand(30,60);
-//        $data['face_water'] = rand(30,60);
-        //$data['age'] = $readFace['result'][0]['age'];
+        $key = rand(1,3);
+        if($key == 1){
+            $data['face_q'] += 30;
+        }elseif ($key == 2){
+            $data['face_gloss'] += 30;
+        }elseif ($key == 3){
+            $data['face_water'] += 30;
+        }
         //存七牛
         $return = $this -> uploadPic($file);
         if($return['code'] != 0){
