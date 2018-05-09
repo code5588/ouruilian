@@ -107,9 +107,11 @@ class MemberModel extends ApiModel{
 
     public function getRank($user_id){
 
-        $rank_sql = "select id,share_member_id,sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water as point from `member` order by sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water desc limit 100";
+        $rank_sql = "select id,share_member_id,sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water as point from `member` order by point desc";
         $member = \think\Db::query($rank_sql);
+        //$top100 = array_slice($member,0,99);
         $friends_member = [];
+        $allRank = '';
         foreach ($member as $k => $v){
             if($v['id'] == $user_id){
                 $allRank = $k +1;
@@ -160,7 +162,7 @@ class MemberModel extends ApiModel{
 
     public function getAllRankList(){
 
-        $rank_sql = "select user_name,sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water as point,head_url from `member` order by sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water desc limit 100";
+        $rank_sql = "select user_name,sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water as point,head_url from `member` order by point desc limit 100";
         $member = \think\Db::query($rank_sql);
         foreach ($member as $k => $v){
             $member[$k]['rank'] = $k+1;
@@ -171,7 +173,7 @@ class MemberModel extends ApiModel{
 
     public function getFriendsRankList($user_id){
 
-        $rank_sql = "select user_name,sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water as point,share_member_id,head_url from `member` where share_member_id = ".$user_id." order by sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water desc limit 98";
+        $rank_sql = "select user_name,sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water as point,share_member_id,head_url from `member` where share_member_id = ".$user_id." order by point desc limit 98";
         $member = \think\Db::query($rank_sql);
 
         $user_info = $this -> userInfo($user_id);
