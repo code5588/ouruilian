@@ -14,11 +14,17 @@ class Member extends \app\admin\Auth
             $page = $this->request->get('page/d', 1);
             $page = max(0, $page - 1);
             $limit = $this->request->get('limit/d');
-            $search = $this->request->get('search');
-
+            $keywords = $this->request->get('search');
+            if($keywords){
+                $search = str_replace('\\','_',$this -> unicode_encode($keywords));
+            }else{
+                $search = '';
+            }
             $memberModel = new MemberModel();
             $data = $memberModel->getList($page,$limit,$search);
-
+            foreach ($data['list'] as $k => $v){
+                $data['list'][$k]["user_name"] = $this -> unicode2utf8($v['user_name']);
+            }
             return json(['code' => 0, 'count' => $data['count'], 'data' => $data['list']]);
         }
 
@@ -45,5 +51,42 @@ class Member extends \app\admin\Auth
         return $this->fetch('showFriends',['id'=>$id]);
     }
 
+
+    public function unicode_encode($name)
+    {
+        $name = iconv('UTF-8', 'UCS-2', $name);
+        $len = strlen($name);
+        $str = '';
+        for ($i = 0; $i < $len - 1; $i = $i + 2)
+        {
+            $c = $name[$i];
+            $c2 = $name[$i + 1];
+            if (ord($c) > 0)
+            {   //两个字节的文字
+                $str .= '\u'.base_convert(ord($c), 10, 16).str_pad(base_convert(ord($c2), 10, 16), 2, 0, STR_PAD_LEFT);
+            }
+            else
+            {
+                $str .= $c2;
+            }
+        }
+        return $str;
+    }
+
+    public function unicode2utf8($str){
+        if(!$str){
+            return $str;
+        }
+        $decode = json_decode($str);
+        if($decode){
+            return $decode;
+        }
+        $str = '["' . $str . '"]';
+        $decode = json_decode($str);
+        if(count($decode) == 1){
+            return $decode[0];
+        }
+            return $str;
+        }
 
 }

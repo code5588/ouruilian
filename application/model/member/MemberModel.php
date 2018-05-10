@@ -16,7 +16,7 @@ class MemberModel extends ApiModel{
         $order = ['id ASC'];
         $where = ['status = 1'];
         if ($user_name) {
-            $where[] = "member like '%{$user_name}%'";
+            $where[] = "user_name like '%{$user_name}%'";
         }
 
         $sql = "SELECT *, sign_mark+face_mark+answer_mark+face_q+face_gloss+face_water as point FROM `member` ";
@@ -24,7 +24,6 @@ class MemberModel extends ApiModel{
         $sql_count = "SELECT count(*) as count FROM `member`";
 
         $return = $this->_getList($sql, $sql_count, $where, $order, true, $page, $pageSize);
-
         return $return;
     }
 
