@@ -44,7 +44,9 @@ class Member extends \app\admin\Auth
 
             $memberModel = new MemberModel();
             $data = $memberModel->getFriendsList($id,$page,$limit);
-
+            foreach ($data['list'] as $k => $v){
+                $data['list'][$k]["user_name"] = $this -> unicode2utf8($v['user_name']);
+            }
             return json(['code' => 0, 'count' => $data['count'], 'data' => $data['list']]);
         }
 
