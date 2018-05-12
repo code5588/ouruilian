@@ -125,10 +125,11 @@ class MemberModel extends ApiModel{
         $user['point'] = $user_info[0]['point'];
         $user['head_url'] = $user_info[0]['head_url'];
         //var_dump($friends_member);die;
+        array_push($friends_member,$user);
 
         if($user_info[0]['share_member_id']){
 
-            array_push($friends_member,$user);
+            //array_push($friends_member,$user);
 
             $share_user_info =  $this -> userInfo($user_info[0]['share_member_id']);
             $share_user['user_name'] = $share_user_info[0]['user_name'];
@@ -149,7 +150,17 @@ class MemberModel extends ApiModel{
             }
             $data['friendsRank'] = $friendsRank;
         }else{
-            $data['friendsRank'] = 0;
+
+            foreach ($friends_member as $k => $v){
+                $tmp[$k] = $v['point'];
+            }
+            array_multisort($tmp,SORT_DESC,$friends_member);
+            foreach ($friends_member as $k => $v){
+                if($v['id'] == $user_id){
+                    $friendsRank = $k +1;
+                }
+            }
+            $data['friendsRank'] = $friendsRank;
         }
 
 

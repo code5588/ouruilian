@@ -11,3 +11,4 @@ function getConf(){
     return $conf;
 
 }
+

@@ -62,43 +62,17 @@ class Login extends \think\Controller
 
     public function wxlogin($code){
 
-
         if(empty($code)){
             return json(['code'=>-1,'data'=>'code不能为空!']);
         }
         include_once EXTEND_PATH . 'get_wx_userinfo.php';
         $get_wx_userinfo=new \get_wx_userinfo();
         $token_openid=$get_wx_userinfo->get_token_openid($code);
-        //var_dump($token_openid);die;
         $openid=isset($token_openid["openid"])?$token_openid["openid"]:"";
-       // $token=isset($token_openid["access_token"])?$token_openid["access_token"]:"";
         if (!$openid){
             return json(['code'=>-2,'data'=>'授权码已过期，请返回重试!']);
         }
         return $openid;
     }
-    /*public function registerMember(){
 
-        $user_name = input('user_name');
-        $head_url = input('head_url');
-        $openid = input('openid');
-        $share_member_id  =input('share_member_id');
-
-        if(empty($user_name) || empty($head_url) || empty($openid)){
-            return json(['code'=>-1,'data'=>'缺少参数']);
-        }
-
-        $memberModel = new memberModel();
-        if($share_member_id){
-            $return = $memberModel -> insertMember($user_name,$head_url,$openid,$share_member_id);
-        }else{
-            $return = $memberModel -> insertMember($user_name,$head_url,$openid);
-        }
-
-        if($return){
-            return json(['code'=>0,'data'=>'添加用户成功']);
-        }else{
-            return json(['code'=>-1,'data'=>'添加用户失败']);
-        }
-    }*/
 }

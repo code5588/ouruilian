@@ -86,10 +86,15 @@ class Member extends \app\member\Base{
 
         $FriendsRank = $memberModel -> getFriendsRankList($user_id);
         $rank = $memberModel -> getRank($user_id);
-        $count = $memberModel -> getMemberCount($user_id);
+        $count = $memberModel -> getMemberCount($user_id) + 1;
         $userRankBehind = $count - $rank['friendsRank'];
         $userFriends = $count - 1;
-        $proportion = round(($userRankBehind/$userFriends)*100,2);
+        if($userFriends > 0){
+            $proportion = round(($userRankBehind/$userFriends)*100,2);
+        }else{
+            $proportion = 100;
+        }
+
         return json(['code' => 0,'data'=>$FriendsRank,'rank'=>$rank['friendsRank'],'proportion'=>$proportion]);
     }
 }
